@@ -4,6 +4,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import br.com.yanvelasco.screemmatch.service.ConsumoApi;
+
 @SpringBootApplication
 public class ScreemmatchApplication implements CommandLineRunner{
 
@@ -13,7 +15,9 @@ public class ScreemmatchApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		throw new UnsupportedOperationException("Unimplemented method 'run'");
+		var consumoApi = new ConsumoApi();
+		var json = consumoApi.obterDados("http://www.omdbapi.com/?i=tt3896198&apikey=e45f66b9");
+		System.out.println(json);
 	}
 
 }

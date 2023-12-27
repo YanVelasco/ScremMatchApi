@@ -4,6 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import br.com.yanvelasco.screemmatch.model.DTODadosEpisodio;
 import br.com.yanvelasco.screemmatch.model.DTODadosSerie;
 import br.com.yanvelasco.screemmatch.service.ConsumoApi;
 import br.com.yanvelasco.screemmatch.service.ConverterDados;
@@ -21,7 +22,11 @@ public class ScreemmatchApplication implements CommandLineRunner{
 		var json = consumoApi.obterDados("http://www.omdbapi.com/?i=tt3896198&apikey=e45f66b9");
 		System.out.println(json);
 		ConverterDados conversor = new ConverterDados();
-		DTODadosSerie dados = conversor.obterDados(json, DTODadosSerie.class);
-		System.out.println(dados);
+		DTODadosSerie dtoDadosSerie = conversor.obterDados(json, DTODadosSerie.class);
+		System.out.println(dtoDadosSerie);
+
+		json = consumoApi.obterDados("https://www.omdbapi.com/?t=gilmore+girls&apikey=e45f66b9");
+		DTODadosEpisodio dtoDadosEpisodio = conversor.obterDados(json, DTODadosEpisodio.class);
+		System.out.println(dtoDadosEpisodio);
 	}
 }

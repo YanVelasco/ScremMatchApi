@@ -1,5 +1,7 @@
 package br.com.yanvelasco.screemmatch.principal;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -63,5 +65,23 @@ public class Principal {
                 ).collect(Collectors.toList());
 
         episodios.forEach(System.out::println);
+
+        // pesquisa por ano informado
+        System.out.println("A partir de que ano você deseja ver os episodios?");
+        var ano = sc.nextInt();
+        sc.nextLine();
+
+        LocalDate dataBusca = LocalDate.of(ano, 1, 1);
+
+        DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        episodios.stream()
+            .filter(e -> e.getDataLancamento() != null && e.getDataLancamento().isAfter(dataBusca))
+            .forEach(e -> System.out.println(
+                "Temporada " + e.getTemporada() +
+                " Episódio " + e.getTitulo() +
+                " Data de lançamento " + e.getDataLancamento().format(formatador)
+            ));
+
+
     }
 }

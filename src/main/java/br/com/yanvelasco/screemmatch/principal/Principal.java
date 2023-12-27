@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import br.com.yanvelasco.screemmatch.model.DTODadosEpisodio;
 import br.com.yanvelasco.screemmatch.model.DTODadosSerie;
 import br.com.yanvelasco.screemmatch.model.DTODadosTemporadas;
+import br.com.yanvelasco.screemmatch.model.Episodio;
 import br.com.yanvelasco.screemmatch.service.ConsumoApi;
 import br.com.yanvelasco.screemmatch.service.ConverterDados;
 
@@ -55,5 +56,12 @@ public class Principal {
         .reversed())
         .limit(5)
         .forEach(System.out::println);
+
+        List<Episodio>episodios = temporadas.stream()
+                .flatMap(t -> t.episodios().stream()
+                    .map(d -> new Episodio(t.numeroTemporadas(), d))
+                ).collect(Collectors.toList());
+
+        episodios.forEach(System.out::println);
     }
 }

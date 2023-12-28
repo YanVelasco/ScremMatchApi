@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -52,21 +53,21 @@ public class Principal {
                 .flatMap(t -> t.episodios().stream())
                 .collect(Collectors.toList());
 
-        dtoDadosEpisodios.stream()
-                .filter(e -> !e.avaliacao().equalsIgnoreCase("N/A"))
-                // Debugando o código
-                .peek(e -> System.out.println("Primeiro filtro N/A " + e))
-                .sorted(Comparator.comparing(DTODadosEpisodio::avaliacao)
-                        .reversed())
-                // Debugando o código
-                .peek(e -> System.out.println("Ordenação " + e))           
-                .limit(5)
-                // Debugando o código
-                .peek(e -> System.out.println("Limite " + e))  
-                .map(e-> e.titulo().toUpperCase())
-                // Debugando o código
-                .peek(e -> System.out.println("Mapeamento " + e))  
-                .forEach(System.out::println);
+        // dtoDadosEpisodios.stream()
+        //         .filter(e -> !e.avaliacao().equalsIgnoreCase("N/A"))
+        //         // Debugando o código
+        //         .peek(e -> System.out.println("Primeiro filtro N/A " + e))
+        //         .sorted(Comparator.comparing(DTODadosEpisodio::avaliacao)
+        //                 .reversed())
+        //         // Debugando o código
+        //         .peek(e -> System.out.println("Ordenação " + e))           
+        //         .limit(5)
+        //         // Debugando o código
+        //         .peek(e -> System.out.println("Limite " + e))  
+        //         .map(e-> e.titulo().toUpperCase())
+        //         // Debugando o código
+        //         .peek(e -> System.out.println("Mapeamento " + e))  
+        //         .forEach(System.out::println);
 
         List<Episodio> episodios = temporadas.stream()
                 .flatMap(t -> t.episodios().stream()
@@ -75,20 +76,34 @@ public class Principal {
 
         episodios.forEach(System.out::println);
 
+        // filtrando buscas
+        System.out.println("Digite um trecho do título do episódio:");
+        var trechoDoTitulo = sc.nextLine();
+        Optional<Episodio> episodioBuscado = episodios.stream()
+            .filter(e -> e.getTitulo().toUpperCase().contains(trechoDoTitulo.toUpperCase()))
+            .findFirst();
+        if (episodioBuscado.isPresent()) {
+            System.out.println("Episódio encontrado");
+            System.out.println("Temporada: " + episodioBuscado.get().getTemporada());
+        }else{
+            System.out.println("Episódio não encontrado");
+        }
+
+        
         // pesquisa por ano informado
-        System.out.println("A partir de que ano você deseja ver os episodios?");
-        var ano = sc.nextInt();
-        sc.nextLine();
+        // System.out.println("A partir de que ano você deseja ver os episodios?");
+        // var ano = sc.nextInt();
+        // sc.nextLine();
 
-        LocalDate dataBusca = LocalDate.of(ano, 1, 1);
+        // LocalDate dataBusca = LocalDate.of(ano, 1, 1);
 
-        DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        episodios.stream()
-                .filter(e -> e.getDataLancamento() != null && e.getDataLancamento().isAfter(dataBusca))
-                .forEach(e -> System.out.println(
-                        "Temporada " + e.getTemporada() +
-                                " Episódio " + e.getTitulo() +
-                                " Data de lançamento " + e.getDataLancamento().format(formatador)));
+        // DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        // episodios.stream()
+        //         .filter(e -> e.getDataLancamento() != null && e.getDataLancamento().isAfter(dataBusca))
+        //         .forEach(e -> System.out.println(
+        //                 "Temporada " + e.getTemporada() +
+        //                         " Episódio " + e.getTitulo() +
+        //                         " Data de lançamento " + e.getDataLancamento().format(formatador)));
 
     }
 }

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -112,5 +113,14 @@ public class Principal {
             // pegando a média das avalições por temporada
             .collect(Collectors.groupingBy(Episodio::getTemporada, Collectors.averagingDouble(Episodio:: getAvaliacao)));
         System.out.println(avaliacoesPorTemporada);
+
+        // Utilizando uma classe de estatisticas que retorna o DoubleSummaryStatistics{count=29, sum=251,100000, min=8,000000, average=8,658621, max=9,500000}
+        DoubleSummaryStatistics statistics = episodios.stream()
+            .filter(e -> e.getAvaliacao() > 0.0)
+            .collect(Collectors.summarizingDouble(Episodio::getAvaliacao));
+        System.out.println("Média: " + statistics.getAverage());
+        System.out.println("Pior episódio: " + statistics.getMin());
+        System.out.println("Melhor episódio: " + statistics.getMax());
+        System.out.println("Total de episódios avaliados: " + statistics.getCount());
     }
 }
